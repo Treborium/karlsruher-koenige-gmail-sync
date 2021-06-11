@@ -1,0 +1,16 @@
+{
+  "name": "gmail-sync",
+  "version": "1.0.0",
+  "description": "fetch and synchronise with your gmail",
+  "main": "index.ts",
+  "author": "Robert Fuchs <robert.fuchs@logmein.com>",
+  "license": "MIT",
+  "scripts": {
+    "compile": "tsc",
+    "start": "yarn compile && node compiled/index.js"
+  },
+  "devDependencies": {
+    "@types/node": "^15.12.2",
+    "typescript": "^4.3.2"
+  }
+}
