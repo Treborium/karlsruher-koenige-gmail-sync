@@ -12,5 +12,8 @@
   "devDependencies": {
     "@types/node": "^15.12.2",
     "typescript": "^4.3.2"
+  },
+  "dependencies": {
+    "gmail-inbox": "^1.5.0"
   }
 }

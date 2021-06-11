@@ -189,3 +189,5 @@ temp/
 # End of https://www.toptal.com/developers/gitignore/api/node,macos,visualstudiocode,yarn
 
 compiled/
+credentials.json
+gmail-token.json
