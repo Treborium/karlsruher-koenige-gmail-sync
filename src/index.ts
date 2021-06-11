@@ -1,14 +1,12 @@
 import { Inbox } from 'gmail-inbox';
 
-async function exeCuteMe(){
-  let inbox = new Inbox('credentials.json');
+async function fetchMails(){
+  const inbox = new Inbox('credentials.json');
   await inbox.authenticateAccount(); // logs user in
   
-  let messages = await inbox.getLatestMessages();
+  const messages = await inbox.findMessages('from:Turn Koenige <turnkoenige@gmail.com>');
 
-  console.log("my inbox messages", JSON.stringify(messages,null,4));
-  
-  // Note: give  https://github.com/ismail-codinglab/gmail-inbox a star if it saved you time!
+  console.log("my inbox messages", JSON.stringify(messages.slice(0, 3),null,4));
 }
 
-exeCuteMe();
+fetchMails();
