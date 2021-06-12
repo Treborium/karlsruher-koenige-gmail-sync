@@ -6,7 +6,7 @@ export async function fetchMails(): Promise<Message[]> {
   
   const searchFilter = 'from:Turn Koenige <turnkoenige@gmail.com>';
   const messages = await inbox.findMessages(searchFilter);
-  console.info('First three messages:', JSON.stringify(messages.slice(0, 3), null, 4));
+  console.info(`Fetched ${messages.length} messages.`);
 
   return messages;
 }
