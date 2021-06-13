@@ -1,10 +1,11 @@
 import AWS from 'aws-sdk';
 import { Body } from 'aws-sdk/clients/s3';
 
-AWS.config.credentials = new AWS.SharedIniFileCredentials({profile: 'personal-account'});
-AWS.config.update({region: 'eu-central-1'});  // eu-central-1 = Frankfurt
 
 export function uploadToS3(filename: string, content: Body) {
+  AWS.config.credentials = new AWS.Credentials({accessKeyId: process.env.X_ACCESS_KEY_ID!, secretAccessKey: process.env.X_SECRET_ACCESS_KEY! });
+  AWS.config.update({region: process.env.X_REGION});
+
   console.info(`Uploading file to S3. filename=${filename}`);
   const s3 = new AWS.S3({apiVersion: '2006-03-01'});
 
