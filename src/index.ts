@@ -1,4 +1,6 @@
 import { APIGatewayEvent } from 'aws-lambda';
+import { createHash } from 'crypto';
+import { uploadToS3 } from './s3';
 
 export const handler = async (event: APIGatewayEvent) => {
   console.log('Incoming event: ', event);
@@ -19,7 +21,8 @@ export const handler = async (event: APIGatewayEvent) => {
     return { statusCode: 403 };
   }
 
-  uploadToS3();
+  const filename = createHash('md5').update(message.subject).digest('hex');
+  uploadToS3(filename, JSON.stringify(message));
   
   const response = {
       statusCode: 200,
@@ -27,10 +30,6 @@ export const handler = async (event: APIGatewayEvent) => {
   };
   return response;
 };
-
-function uploadToS3() {
-  console.info('Upload to S3…');
-}
 
 
 interface Message {
