@@ -1,31 +1,42 @@
-import { fetchMails } from "./gmail";
-import { uploadToS3 } from "./s3";
-import { createHash } from 'crypto';
+import { APIGatewayEvent } from 'aws-lambda';
 
-interface FileContent {
-  title: string;
-  content: string;
-  date?: string;
-  preview?: string;
-}
-
-async function convertMailToFile() {
-  const mails = await fetchMails();
-  const files: FileContent[] = mails.filter(mail => (mail.subject && mail.body.text)).map(mail => (
-    {
-      title: mail.subject!,
-      content: mail.body.text!,
-      date: mail.receivedOn,
-      preview: mail.snippet,
-    }
-  ));
-
+export const handler = async (event: APIGatewayEvent) => {
+  console.log('Incoming event: ', event);
   
-  files.forEach(file => {
-    const name = createHash('md5').update(file.title).digest('hex');
-    uploadToS3(name, JSON.stringify(file));
-  });
+  if (!event.body) {
+    console.error('No body attached');
+    return { statusCode: 400 };
+  }
+
+  const decodedBody = Buffer.from(event.body, 'base64').toString('utf-8');
+  console.info('Decoded body:', decodedBody);
+  const message: Message = JSON.parse(decodedBody);
+  console.info('Received message:', message);
+
+  const expectedSender = 'turnkoenige@gmail.com';
+  if (message.from !== expectedSender) {
+    console.error(`Message is not from "${expectedSender}" but instead from "${message.from}"`);
+    return { statusCode: 403 };
+  }
+
+  uploadToS3();
+  
+  const response = {
+      statusCode: 200,
+      body: JSON.stringify('Success'),
+  };
+  return response;
+};
+
+function uploadToS3() {
+  console.info('Upload to S3…');
 }
 
-convertMailToFile();
 
+interface Message {
+  from: string;
+  subject: string;
+  receivedOn: string;
+  text: string;
+  html: string;
+}

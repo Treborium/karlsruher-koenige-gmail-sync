@@ -1,18 +1,21 @@
 {
   "name": "gmail-sync",
   "version": "1.0.0",
-  "description": "fetch and synchronise with your gmail",
+  "description": "fetch and synchronize with your gmail",
   "main": "index.ts",
   "author": "Robert Fuchs <robert.fuchs@logmein.com>",
   "license": "MIT",
   "scripts": {
     "compile": "tsc",
+    "package": "yarn compile && yarn install --production --modules-folder compiled/node_modules && cp package.json compiled/package.json",
     "start": "yarn compile && node compiled/index.js",
     "upload": "yarn compile && node compiled/s3.js"
   },
   "devDependencies": {
+    "@types/aws-lambda": "^8.10.77",
     "@types/node": "^15.12.2",
     "@types/uuid": "^8.3.0",
+    "aws-xray-sdk": "^3.3.3",
     "typescript": "^4.3.2"
   },
   "dependencies": {
