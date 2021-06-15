@@ -4,7 +4,7 @@ import { uploadToS3 } from './s3';
 
 export const handler = async (event: APIGatewayEvent) => {
   console.log('Incoming event: ', event);
-  
+
   if (!event.body) {
     console.error('No body attached');
     return { statusCode: 400 };
@@ -17,20 +17,21 @@ export const handler = async (event: APIGatewayEvent) => {
 
   const expectedSender = 'turnkoenige@gmail.com';
   if (message.from !== expectedSender) {
-    console.error(`Message is not from "${expectedSender}" but instead from "${message.from}"`);
+    console.error(
+      `Message is not from "${expectedSender}" but instead from "${message.from}"`
+    );
     return { statusCode: 403 };
   }
 
   const filename = createHash('md5').update(message.subject).digest('hex');
   await uploadToS3(filename, JSON.stringify(message));
-  
+
   const response = {
-      statusCode: 200,
-      body: JSON.stringify('Success'),
+    statusCode: 200,
+    body: JSON.stringify('Success'),
   };
   return response;
 };
-
 
 interface Message {
   from: string;
