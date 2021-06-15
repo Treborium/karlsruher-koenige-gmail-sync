@@ -5,7 +5,6 @@ import { Body } from 'aws-sdk/clients/s3';
 export async function uploadToS3(filename: string, content: Body) {
   const credentials = new AWS.Credentials({accessKeyId: process.env.X_ACCESS_KEY_ID!, secretAccessKey: process.env.X_SECRET_ACCESS_KEY! });
   AWS.config.credentials = credentials;
-  // AWS.config.update({region: process.env.X_REGION});
 
   console.info(`Uploading file to S3. filename=${filename}`);
   const s3 = new AWS.S3({apiVersion: '2006-03-01', credentials: credentials });

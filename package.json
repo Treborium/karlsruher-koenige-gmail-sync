@@ -1,15 +1,14 @@
 {
-  "name": "gmail-sync",
+  "name": "mail-deposit",
   "version": "1.0.0",
-  "description": "fetch and synchronize with your gmail",
+  "description": "Upload received mails to S3",
   "main": "index.ts",
-  "author": "Robert Fuchs <robert.fuchs@logmein.com>",
+  "author": "Robert Fuchs <robertfuchs97@gmail.com",
   "license": "MIT",
   "scripts": {
     "compile": "tsc",
     "package": "yarn compile && yarn install --production --modules-folder compiled/node_modules && cp package.json compiled/package.json",
-    "start": "yarn compile && node compiled/index.js",
-    "upload": "yarn compile && node compiled/s3.js"
+    "start": "yarn compile && node compiled/index.js"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.77",
