@@ -7,13 +7,14 @@ export const handler = async (event: APIGatewayEvent) => {
 
   if (!event.body) {
     console.error('No body attached');
-    return { statusCode: 400 };
+    return { statusCode: 400, body: 'No body attached' };
   }
 
-  const decodedBody = Buffer.from(event.body, 'base64').toString('utf-8');
-  console.info('Decoded body:', decodedBody);
-  const message: Message = JSON.parse(decodedBody);
-  console.info('Received message:', message);
+  const message = parseBody(event.body);
+  if (!message) {
+    console.error('Invalid body');
+    return { statusCode: 400, body: 'Could not parse body' };
+  }
 
   const expectedSender = 'turnkoenige@gmail.com';
   if (message.from !== expectedSender) {
@@ -32,6 +33,20 @@ export const handler = async (event: APIGatewayEvent) => {
   };
   return response;
 };
+
+function parseBody(body: string): Message | undefined {
+  const decodedBody = Buffer.from(body, 'base64').toString('utf-8');
+  console.info('Decoded body:', decodedBody);
+  try {
+    const message: Message = JSON.parse(decodedBody);
+    console.info('Received message:', message);
+    return message;
+  } catch (error) {
+    console.error('Error while parsing body:', error);
+  }
+
+  return undefined;
+}
 
 interface Message {
   from: string;
