@@ -22,7 +22,7 @@ export const handler = async (event: APIGatewayEvent) => {
   }
 
   const filename = createHash('md5').update(message.subject).digest('hex');
-  uploadToS3(filename, JSON.stringify(message));
+  await uploadToS3(filename, JSON.stringify(message));
   
   const response = {
       statusCode: 200,
