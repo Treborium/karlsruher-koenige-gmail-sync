@@ -24,7 +24,9 @@ export const handler = async (event: APIGatewayEvent) => {
     return { statusCode: 403 };
   }
 
-  const filename = createHash('md5').update(message.subject).digest('hex');
+  const filename = createHash('md5')
+    .update(replaceAllWhiteSpaces(message.subject))
+    .digest('hex');
   await uploadToS3(filename, JSON.stringify(message));
 
   const response = {
@@ -46,6 +48,10 @@ function parseBody(body: string): Message | undefined {
   }
 
   return undefined;
+}
+
+export function replaceAllWhiteSpaces(str: string): string {
+  return str.trim().replace(/\s/g, '-');
 }
 
 interface Message {
