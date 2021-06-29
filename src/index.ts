@@ -24,16 +24,15 @@ export const handler = async (event: APIGatewayEvent) => {
     return { statusCode: 403 };
   }
 
-  const filename = createHash('md5')
-    .update(replaceAllWhiteSpaces(message.subject))
-    .digest('hex');
+  message.subject = removePrefix(message.subject, '["Turner:"]');
+
+  const filename = createHash('md5').update(message.subject).digest('hex');
   await uploadToS3(filename, JSON.stringify(message));
 
-  const response = {
+  return {
     statusCode: 200,
     body: JSON.stringify('Success'),
   };
-  return response;
 };
 
 function parseBody(body: string): Message | undefined {
@@ -50,8 +49,12 @@ function parseBody(body: string): Message | undefined {
   return undefined;
 }
 
-export function replaceAllWhiteSpaces(str: string): string {
-  return str.trim().replace(/\s/g, '-');
+export function removePrefix(str: string, prefix: string): string {
+  const trimmed = str.trim();
+  if (trimmed.startsWith(prefix)) {
+    return trimmed.slice(prefix.length).trim();
+  }
+  return trimmed;
 }
 
 interface Message {
