@@ -36,4 +36,4 @@ cd compiled/
 zip -r function.zip .  # create zip file of compiled/
 ```
 
-You then need to upload the created archive `function.zip` in `compiled/` to your AWS Lambda.
+You then need to upload the created archive `function.zip` in the `compiled/` folder to your AWS Lambda.
